@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import configparser
 import pkg_resources
 import helper_funcs_glob
-
 """
 Created by:
 Alexander Heilmeier
@@ -38,10 +37,13 @@ plot_opts = {"mincurv_curv_lin": False,         # plot curv. linearization (orig
              "mintime_plots": False}            # plot states, controls, friction coeffs etc. (mintime only)
 
 # select track file (including centerline coordinates + track widths) --------------------------------------------------
-# file_paths["track_name"] = "rounded_rectangle"                              # artificial track
-# file_paths["track_name"] = "handling_track"                                 # artificial track
-file_paths["track_name"] = "berlin_2018"                                    # Berlin Formula E 2018
+#file_paths["track_name"] = "rounded_rectangle"                              # artificial track
+#file_paths["track_name"] = "handling_track"                                 # artificial track
+#file_paths["track_name"] = "berlin_2018"                                    # Berlin Formula E 2018
 # file_paths["track_name"] = "modena_2019"                                    # Modena 2019
+#file_paths["track_name"] = "MAE148RingRoadTracktimes10" 
+#file_paths["track_name"] = "MAE148RingRoadSpreadOut"
+file_paths["track_name"] = "test2" 
 
 # set import options ---------------------------------------------------------------------------------------------------
 imp_opts = {"flip_imp_track": False,                # flip imported track to reverse direction
@@ -56,7 +58,7 @@ imp_opts = {"flip_imp_track": False,                # flip imported track to rev
 # 'mincurv'             minimum curvature optimization without iterative call
 # 'mincurv_iqp'         minimum curvature optimization with iterative call
 # 'mintime'             time-optimal trajectory optimization
-opt_type = 'mintime'
+opt_type = 'shortest_path'
 
 # set mintime specific options (mintime only) --------------------------------------------------------------------------
 # tpadata:                      set individual friction map data file if desired (e.g. for varmue maps), else set None,
@@ -143,12 +145,12 @@ if opt_type == 'mintime' \
 os.makedirs(file_paths["module"] + "/outputs", exist_ok=True)
 
 if opt_type == 'mintime':
-    os.makedirs(file_paths["module"] + "/outputs/mintime", exist_ok=True)
+    os.makedirs(file_paths["module"] + "/outputs/mintime", exist_ok=True)  
 
 # assemble export paths
 file_paths["mintime_export"] = os.path.join(file_paths["module"], "outputs", "mintime")
-file_paths["traj_race_export"] = os.path.join(file_paths["module"], "outputs", "traj_race_cl.csv")
-# file_paths["traj_ltpl_export"] = os.path.join(file_paths["module"], "outputs", "traj_ltpl_cl.csv")
+#file_paths["traj_race_export"] = os.path.join(file_paths["module"], "outputs", "traj_race_cl.csv")
+file_paths["traj_ltpl_export"] = os.path.join(file_paths["module"], "outputs", "traj_ltpl_cl.csv")
 file_paths["lap_time_mat_export"] = os.path.join(file_paths["module"], "outputs", lap_time_mat_opts["file"])
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -420,20 +422,21 @@ t_profile_cl = tph.calc_t_profile.calc_t_profile(vx_profile=vx_profile_opt,
                                                  ax_profile=ax_profile_opt,
                                                  el_lengths=el_lengths_opt_interp)
 print("INFO: Estimated laptime: %.2fs" % t_profile_cl[-1])
+print(file_paths)
 
-if plot_opts["racetraj_vel"]:
-    s_points = np.cumsum(el_lengths_opt_interp[:-1])
-    s_points = np.insert(s_points, 0, 0.0)
+# if plot_opts["racetraj_vel"]:                                       #this plot pauses the code and does not complete
+#     s_points = np.cumsum(el_lengths_opt_interp[:-1])
+#     s_points = np.insert(s_points, 0, 0.0)
 
-    plt.plot(s_points, vx_profile_opt)
-    plt.plot(s_points, ax_profile_opt)
-    plt.plot(s_points, t_profile_cl[:-1])
+#     plt.plot(s_points, vx_profile_opt)
+#     plt.plot(s_points, ax_profile_opt)
+#     plt.plot(s_points, t_profile_cl[:-1])
 
-    plt.grid()
-    plt.xlabel("distance in m")
-    plt.legend(["vx in m/s", "ax in m/s2", "t in s"])
+#     plt.grid()
+#     plt.xlabel("distance in m")
+#     plt.legend(["vx in m/s", "ax in m/s2", "t in s"])
 
-    plt.show()
+#     plt.show()
 
 # ----------------------------------------------------------------------------------------------------------------------
 # CALCULATE LAP TIMES (AT DIFFERENT SCALES AND TOP SPEEDS) -------------------------------------------------------------
@@ -544,6 +547,7 @@ if "traj_race_export" in file_paths.keys():
 
 # if requested, export trajectory including map information (via normal vectors) to CSV
 if "traj_ltpl_export" in file_paths.keys():
+    print("test")   
     helper_funcs_glob.src.export_traj_ltpl.export_traj_ltpl(file_paths=file_paths,
                                                             spline_lengths_opt=spline_lengths_opt,
                                                             trajectory_opt=trajectory_opt,
