@@ -1,0 +1,3 @@
+[submodule "ece_148_final_project_trajectory"]
+	path = ece_148_final_project_trajectory
+	url = https://gitlab.com/franks-group/ece_148_final_project_trajectory.git
