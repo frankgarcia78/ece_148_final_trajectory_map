@@ -43,7 +43,7 @@ plot_opts = {"mincurv_curv_lin": False,         # plot curv. linearization (orig
 # file_paths["track_name"] = "modena_2019"                                    # Modena 2019
 #file_paths["track_name"] = "MAE148RingRoadTracktimes10" 
 #file_paths["track_name"] = "MAE148RingRoadSpreadOut"
-file_paths["track_name"] = "test2" 
+file_paths["track_name"] = "Indy500v2" 
 
 # set import options ---------------------------------------------------------------------------------------------------
 imp_opts = {"flip_imp_track": False,                # flip imported track to reverse direction
